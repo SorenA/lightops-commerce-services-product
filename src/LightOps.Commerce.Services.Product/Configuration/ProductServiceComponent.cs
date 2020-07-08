@@ -4,12 +4,14 @@ using LightOps.Commerce.Services.Product.Api.Models;
 using LightOps.Commerce.Services.Product.Api.Queries;
 using LightOps.Commerce.Services.Product.Api.QueryHandlers;
 using LightOps.Commerce.Services.Product.Api.Services;
+using LightOps.Commerce.Services.Product.Domain.Mappers.V1;
 using LightOps.Commerce.Services.Product.Domain.Services;
 using LightOps.CQRS.Api.Queries;
 using LightOps.DependencyInjection.Api.Configuration;
 using LightOps.DependencyInjection.Domain.Configuration;
 using LightOps.Mapping.Api.Mappers;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using NodaMoney;
 
 namespace LightOps.Commerce.Services.Product.Configuration
 {
@@ -21,6 +23,7 @@ namespace LightOps.Commerce.Services.Product.Configuration
         {
             return new List<ServiceRegistration>()
                 .Union(_services.Values)
+                .Union(_mappers.Values)
                 .Union(_queryHandlers.Values)
                 .ToList();
         }
@@ -52,6 +55,46 @@ namespace LightOps.Commerce.Services.Product.Configuration
             return this;
         }
         #endregion Services
+
+        #region Mappers
+        internal enum Mappers
+        {
+            ProtoMoneyMapperV1,
+            ProtoProductMapperV1,
+            ProtoProductVariantMapperV1,
+        }
+
+        private readonly Dictionary<Mappers, ServiceRegistration> _mappers = new Dictionary<Mappers, ServiceRegistration>
+        {
+            [Mappers.ProtoMoneyMapperV1] = ServiceRegistration
+                .Transient<IMapper<Money, Proto.Services.Product.V1.ProtoMoney>, ProtoMoneyMapper>(),
+            [Mappers.ProtoProductMapperV1] = ServiceRegistration
+                .Transient<IMapper<IProduct, Proto.Services.Product.V1.ProtoProduct>, ProtoProductMapper>(),
+            [Mappers.ProtoProductVariantMapperV1] = ServiceRegistration
+                .Transient<IMapper<IProductVariant, Proto.Services.Product.V1.ProtoProductVariant>, ProtoProductVariantMapper>(),
+        };
+
+        public IProductServiceComponent OverrideProtoMoneyMapperV1<T>()
+            where T : IMapper<Money, Proto.Services.Product.V1.ProtoMoney>
+        {
+            _mappers[Mappers.ProtoMoneyMapperV1].ImplementationType = typeof(T);
+            return this;
+        }
+
+        public IProductServiceComponent OverrideProtoProductMapperV1<T>()
+            where T : IMapper<IProduct, Proto.Services.Product.V1.ProtoProduct>
+        {
+            _mappers[Mappers.ProtoProductMapperV1].ImplementationType = typeof(T);
+            return this;
+        }
+
+        public IProductServiceComponent OverrideProtoProductVariantMapperV1<T>()
+            where T : IMapper<IProductVariant, Proto.Services.Product.V1.ProtoProductVariant>
+        {
+            _mappers[Mappers.ProtoProductVariantMapperV1].ImplementationType = typeof(T);
+            return this;
+        }
+        #endregion Mappers
 
         #region Query Handlers
         internal enum QueryHandlers
