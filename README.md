@@ -29,7 +29,7 @@ Available services are as follows
 
 ```bash
 service = '' - System as a whole
-service = 'service.content_page.v1.ProtoProductService' - Product v1
+service = 'service.product.v1.ProtoProductService' - Product v1
 ```
 
 For embedding a gRPC client for use with Kubernetes, see [grpc-ecosystem/grpc-health-probe](https://github.com/grpc-ecosystem/grpc-health-probe)
@@ -45,3 +45,97 @@ LightOps packages available on NuGet:
 - `LightOps.DependencyInjection`
 - `LightOps.CQRS`
 - `LightOps.Mapping`
+
+## Using the service component
+
+Register during startup through the `AddProductService(options)` extension on `IDependencyInjectionRootComponent`.
+
+```csharp
+services.AddLightOpsDependencyInjection(root =>
+{
+    root
+        .AddMapping()
+        .AddCqrs()
+        .AddProductService(service =>
+        {
+            // Configure service
+            // ...
+        });
+});
+
+services.AddGrpc();
+```
+
+Register gRPC services for integrations.
+
+```csharp
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapGrpcService<ProductGrpcService>();
+    endpoints.MapGrpcService<HealthGrpcService>();
+
+    // Map other endpoints...
+});
+```
+
+### Configuration options
+
+A component backend is required, defining the query handlers tied to a data-source, see **Query handlers** section bellow for more.
+
+A custom backend, or one of the following standard backends can be used:
+
+- InMemory
+
+### Overridables
+
+Using the `IProductServiceComponent` configuration, the following can be overridden:
+
+```csharp
+public interface IProductServiceComponent
+{
+    #region Services
+    IProductServiceComponent OverrideHealthService<T>() where T : IHealthService;
+    IProductServiceComponent OverrideProductService<T>() where T : IProductService;
+    #endregion Services
+
+    #region Mappers
+    IProductServiceComponent OverrideProtoMoneyV1<T>() where T : IMapper<Money, Proto.Services.Product.V1.ProtoMoney>;
+    IProductServiceComponent OverrideProtoProductMapperV1<T>() where T : IMapper<IProduct, Proto.Services.Product.V1.ProtoProduct>;
+    IProductServiceComponent OverrideProtoProductVariantMapperV1<T>() where T : IMapper<IProductVariant, Proto.Services.Product.V1.ProtoProductVariant>;
+    #endregion Mappers
+
+    #region Query Handlers
+    IProductServiceComponent OverrideCheckProductHealthQueryHandler<T>() where T : ICheckProductHealthQueryHandler;
+    IProductServiceComponent OverrideFetchProductByHandleQueryHandler<T>() where T : IFetchProductByHandleQueryHandler;
+    IProductServiceComponent OverrideFetchProductByIdQueryHandler<T>() where T : IFetchProductByIdQueryHandler;
+    IProductServiceComponent OverrideFetchProductsByCategoryIdQueryHandler<T>() where T : IFetchProductsByCategoryIdQueryHandler;
+    IProductServiceComponent OverrideFetchProductsBySearchQueryHandler<T>() where T : IFetchProductsBySearchQueryHandler;
+    #endregion Query Handlers
+}
+```
+
+`IProductService` is used by the gRPC services and query the data using the `IQueryDispatcher` from the `LightOps.CQRS` package.
+
+The mappers are used for mapping the internal data structure to the versioned protobuf messages.
+
+## Backend modules
+
+### In-Memory
+
+Register during startup through the `UseInMemoryBackend(root, options)` extension on `IProductServiceComponent`.
+
+```csharp
+root.AddProductService(service =>
+{
+    service.UseInMemoryBackend(root, backend =>
+    {
+        var products = new List<IProduct>();
+        // ...
+
+        backend.UseProducts(products);
+    });
+
+    // Configure service
+    // ...
+});
+```
