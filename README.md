@@ -99,7 +99,7 @@ public interface IProductServiceComponent
     #endregion Services
 
     #region Mappers
-    IProductServiceComponent OverrideProtoMoneyV1<T>() where T : IMapper<Money, Proto.Services.Product.V1.ProtoMoney>;
+    IProductServiceComponent OverrideProtoMoneyMapperV1<T>() where T : IMapper<Money, Proto.Services.Product.V1.ProtoMoney>;
     IProductServiceComponent OverrideProtoProductMapperV1<T>() where T : IMapper<IProduct, Proto.Services.Product.V1.ProtoProduct>;
     IProductServiceComponent OverrideProtoProductVariantMapperV1<T>() where T : IMapper<IProductVariant, Proto.Services.Product.V1.ProtoProductVariant>;
     #endregion Mappers
