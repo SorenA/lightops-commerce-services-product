@@ -9,6 +9,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backends", "Backends", "{92
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightOps.Commerce.Services.Product.Backends.InMemory", "src\LightOps.Commerce.Services.Product.Backends.InMemory\LightOps.Commerce.Services.Product.Backends.InMemory.csproj", "{7A39013F-A0DE-4152-9B6A-EFDABE870148}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{1D0EBD72-9EEE-4D16-A2D6-B7A4E637467B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.ProductService", "samples\Sample.ProductService\Sample.ProductService.csproj", "{51AF8966-E8EE-40B6-B444-F3A5291C0536}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +27,17 @@ Global
 		{7A39013F-A0DE-4152-9B6A-EFDABE870148}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A39013F-A0DE-4152-9B6A-EFDABE870148}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A39013F-A0DE-4152-9B6A-EFDABE870148}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51AF8966-E8EE-40B6-B444-F3A5291C0536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51AF8966-E8EE-40B6-B444-F3A5291C0536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51AF8966-E8EE-40B6-B444-F3A5291C0536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51AF8966-E8EE-40B6-B444-F3A5291C0536}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7A39013F-A0DE-4152-9B6A-EFDABE870148} = {929A7BFF-9552-4567-A425-DFA2F087E43E}
+		{51AF8966-E8EE-40B6-B444-F3A5291C0536} = {1D0EBD72-9EEE-4D16-A2D6-B7A4E637467B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E90A1531-5C0F-4EAC-8EC2-8305DB598DC8}
