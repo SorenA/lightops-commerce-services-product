@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <PackageId>LightOps.Commerce.Services.Product</PackageId>
+    <Authors>SorenA</Authors>
+    <Description>.NET Core microservice package for products.</Description>
+    <IsPackable>true</IsPackable>
+    <RepositoryUrl>https://github.com/SorenA/lightops-commerce-services-product</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Protobuf Include="**/*.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.29.0" />
+    <PackageReference Include="LightOps.CQRS" Version="0.3.0" />
+    <PackageReference Include="LightOps.Mapping" Version="0.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.5" />
+    <PackageReference Include="NodaMoney" Version="1.0.6" />
+  </ItemGroup>
+
+</Project>
