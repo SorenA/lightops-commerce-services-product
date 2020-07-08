@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <PackageId>LightOps.Commerce.Services.Product.Backends.InMemory</PackageId>
+    <Authors>SorenA</Authors>
+    <Description>.NET Core backend package for LightOps.Commerce.Services.Product based on in-memory stores.</Description>
+    <IsPackable>true</IsPackable>
+    <RepositoryUrl>https://github.com/SorenA/lightops-commerce-services-product</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LightOps.Commerce.Services.Product\LightOps.Commerce.Services.Product.csproj" />
+  </ItemGroup>
+
+</Project>
