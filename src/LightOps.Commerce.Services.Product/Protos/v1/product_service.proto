@@ -22,7 +22,7 @@ message ProtoProduct {
   string seo_description = 8;
 
   google.protobuf.StringValue primary_category_id = 9;
-  repeated google.protobuf.StringValue category_ids = 10;
+  repeated string category_ids = 10;
 
   repeated ProtoProductVariant variants = 11;
 
