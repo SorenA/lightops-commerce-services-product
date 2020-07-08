@@ -79,7 +79,7 @@ message ProtoGetProductResponse {
 
 // GetProductsByCategoryId
 message ProtoGetProductsByCategoryIdRequest {
-  string parent_id = 1;
+  string category_id = 1;
 }
 
 message ProtoGetProductsByCategoryIdResponse {
