@@ -10,15 +10,15 @@ import "google/protobuf/wrappers.proto";
  * Models
  *************/
 message ProtoProduct {
-	string id = 1;
-	string handle = 2;
-	string url = 3;
+  string id = 1;
+  string handle = 2;
+  string url = 3;
 
-	string title = 4;
-	string type = 5;
+  string title = 4;
+  string type = 5;
   string description = 6;
 
-	string seo_title = 7;
+  string seo_title = 7;
   string seo_description = 8;
 
   google.protobuf.StringValue primary_category_id = 9;
@@ -26,31 +26,31 @@ message ProtoProduct {
 
   repeated ProtoProductVariant variants = 11;
 
-	string primary_image = 12;
-	repeated string images = 13;
+  string primary_image = 12;
+  repeated string images = 13;
 }
 
 message ProtoProductVariant {
   string id = 1;
 
-	string product_id = 2;
+  string product_id = 2;
 
-	string title = 3;
+  string title = 3;
   string sku = 4;
 
-	ProtoMoney money = 5;
+  ProtoMoney money = 5;
 }
 
 message ProtoMoney {
-    // ISO 4217 3-letter currency code
-	string currency_code = 1;
-    
-	// Whole units part of the amount
-	int64 units = 2;
+  // ISO 4217 3-letter currency code
+  string currency_code = 1;
 
-	// Nano units of the amount (10^-9)
-	// Must be same sign as units
-	int32 nanos = 3;
+  // Whole units part of the amount
+  int64 units = 2;
+
+  // Nano units of the amount (10^-9)
+  // Must be same sign as units
+  int32 nanos = 3;
 }
 
 /*************
