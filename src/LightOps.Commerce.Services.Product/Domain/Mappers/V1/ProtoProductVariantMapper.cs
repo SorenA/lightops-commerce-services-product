@@ -26,7 +26,7 @@ namespace LightOps.Commerce.Services.Product.Domain.Mappers.V1
             dest.Title = source.Title;
             dest.Sku = source.Sku;
 
-            dest.Money = _mappingService
+            dest.Price = _mappingService
                 .Map<Money, ProtoMoney>(source.Price);
 
             return dest;

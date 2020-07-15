@@ -38,7 +38,7 @@ message ProtoProductVariant {
   string title = 3;
   string sku = 4;
 
-  ProtoMoney money = 5;
+  ProtoMoney price = 5;
 }
 
 message ProtoMoney {
