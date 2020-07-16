@@ -49,6 +49,28 @@ namespace LightOps.Commerce.Services.Product.Domain.Services.V1
             return result;
         }
 
+        public override async Task<GetProductsByIdResponse> GetProductsById(GetProductsByIdRequest request, ServerCallContext context)
+        {
+            var entities = await _productService.GetByIdAsync(request.Ids);
+            var protoEntities = _mappingService.Map<IProduct, ProtoProduct>(entities);
+
+            var result = new GetProductsByIdResponse();
+            result.Products.AddRange(protoEntities);
+
+            return result;
+        }
+
+        public override async Task<GetProductsByHandleResponse> GetProductsByHandle(GetProductsByHandleRequest request, ServerCallContext context)
+        {
+            var entities = await _productService.GetByHandleAsync(request.Handles);
+            var protoEntities = _mappingService.Map<IProduct, ProtoProduct>(entities);
+
+            var result = new GetProductsByHandleResponse();
+            result.Products.AddRange(protoEntities);
+
+            return result;
+        }
+
         public override async Task<ProtoGetProductsByCategoryIdResponse> GetProductsByCategoryId(ProtoGetProductsByCategoryIdRequest request, ServerCallContext context)
         {
             var entities = await _productService.GetByCategoryIdAsync(request.CategoryId);

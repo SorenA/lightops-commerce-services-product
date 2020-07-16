@@ -23,6 +23,8 @@ namespace LightOps.Commerce.Services.Product.Configuration
         IProductServiceComponent OverrideCheckProductHealthQueryHandler<T>() where T : ICheckProductHealthQueryHandler;
         IProductServiceComponent OverrideFetchProductByHandleQueryHandler<T>() where T : IFetchProductByHandleQueryHandler;
         IProductServiceComponent OverrideFetchProductByIdQueryHandler<T>() where T : IFetchProductByIdQueryHandler;
+        IProductServiceComponent OverrideFetchProductsByHandleQueryHandler<T>() where T : IFetchProductsByHandleQueryHandler;
+        IProductServiceComponent OverrideFetchProductsByIdQueryHandler<T>() where T : IFetchProductsByIdQueryHandler;
         IProductServiceComponent OverrideFetchProductsByCategoryIdQueryHandler<T>() where T : IFetchProductsByCategoryIdQueryHandler;
         IProductServiceComponent OverrideFetchProductsBySearchQueryHandler<T>() where T : IFetchProductsBySearchQueryHandler;
         #endregion Query Handlers
