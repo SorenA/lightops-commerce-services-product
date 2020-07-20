@@ -49,23 +49,23 @@ namespace LightOps.Commerce.Services.Product.Domain.Services.V1
             return result;
         }
 
-        public override async Task<GetProductsByIdResponse> GetProductsById(GetProductsByIdRequest request, ServerCallContext context)
+        public override async Task<GetProductsByIdsResponse> GetProductsByIds(GetProductsByIdsRequest request, ServerCallContext context)
         {
             var entities = await _productService.GetByIdAsync(request.Ids);
             var protoEntities = _mappingService.Map<IProduct, ProtoProduct>(entities);
 
-            var result = new GetProductsByIdResponse();
+            var result = new GetProductsByIdsResponse();
             result.Products.AddRange(protoEntities);
 
             return result;
         }
 
-        public override async Task<GetProductsByHandleResponse> GetProductsByHandle(GetProductsByHandleRequest request, ServerCallContext context)
+        public override async Task<GetProductsByHandlesResponse> GetProductsByHandles(GetProductsByHandlesRequest request, ServerCallContext context)
         {
             var entities = await _productService.GetByHandleAsync(request.Handles);
             var protoEntities = _mappingService.Map<IProduct, ProtoProduct>(entities);
 
-            var result = new GetProductsByHandleResponse();
+            var result = new GetProductsByHandlesResponse();
             result.Products.AddRange(protoEntities);
 
             return result;
@@ -78,6 +78,24 @@ namespace LightOps.Commerce.Services.Product.Domain.Services.V1
 
             var result = new ProtoGetProductsByCategoryIdResponse();
             result.Products.AddRange(protoEntities);
+
+            return result;
+        }
+
+        public override async Task<ProtoGetProductsByCategoryIdsResponse> GetProductsByCategoryIds(ProtoGetProductsByCategoryIdsRequest request, ServerCallContext context)
+        {
+            var entities = await _productService.GetByCategoryIdAsync(request.CategoryIds);
+
+            var result = new ProtoGetProductsByCategoryIdsResponse();
+
+            foreach (var categoryId in entities.Keys)
+            {
+                var protoEntities = _mappingService.Map<IProduct, ProtoProduct>(entities[categoryId]);
+                var protoProductList = new ProtoGetProductsByCategoryIdsResponseProductList();
+                protoProductList.Products.AddRange(protoEntities);
+
+                result.Products.Add(categoryId, protoProductList);
+            }
 
             return result;
         }
