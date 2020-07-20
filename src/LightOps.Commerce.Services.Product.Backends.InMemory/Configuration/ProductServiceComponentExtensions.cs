@@ -28,6 +28,7 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Configuration
                 .OverrideFetchProductByHandleQueryHandler<FetchProductByHandleQueryHandler>()
                 .OverrideFetchProductsByHandlesQueryHandler<FetchProductsByHandlesQueryHandler>()
                 .OverrideFetchProductsByCategoryIdQueryHandler<FetchProductsByCategoryIdQueryHandler>()
+                .OverrideFetchProductsByCategoryIdsQueryHandler<FetchProductsByCategoryIdsQueryHandler>()
                 .OverrideFetchProductsBySearchQueryHandler<FetchProductsBySearchQueryHandler>();
 
             return serviceComponent;

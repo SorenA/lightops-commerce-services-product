@@ -108,6 +108,7 @@ namespace LightOps.Commerce.Services.Product.Configuration
             FetchProductsByHandlesQueryHandler,
 
             FetchProductsByCategoryIdQueryHandler,
+            FetchProductsByCategoryIdsQueryHandler,
 
             FetchProductsBySearchQueryHandler,
         }
@@ -123,6 +124,7 @@ namespace LightOps.Commerce.Services.Product.Configuration
             [QueryHandlers.FetchProductsByHandlesQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByHandlesQuery, IList<IProduct>>>(),
 
             [QueryHandlers.FetchProductsByCategoryIdQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByCategoryIdQuery, IList<IProduct>>>(),
+            [QueryHandlers.FetchProductsByCategoryIdsQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByCategoryIdsQuery, IDictionary<string, IList<IProduct>>>>(),
 
             [QueryHandlers.FetchProductsBySearchQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsBySearchQuery, IList<IProduct>>>(),
         };
@@ -160,6 +162,12 @@ namespace LightOps.Commerce.Services.Product.Configuration
         public IProductServiceComponent OverrideFetchProductsByCategoryIdQueryHandler<T>() where T : IFetchProductsByCategoryIdQueryHandler
         {
             _queryHandlers[QueryHandlers.FetchProductsByCategoryIdQueryHandler].ImplementationType = typeof(T);
+            return this;
+        }
+
+        public IProductServiceComponent OverrideFetchProductsByCategoryIdsQueryHandler<T>() where T : IFetchProductsByCategoryIdsQueryHandler
+        {
+            _queryHandlers[QueryHandlers.FetchProductsByCategoryIdsQueryHandler].ImplementationType = typeof(T);
             return this;
         }
 

@@ -56,6 +56,14 @@ namespace LightOps.Commerce.Services.Product.Domain.Services
             });
         }
 
+        public Task<IDictionary<string, IList<IProduct>>> GetByCategoryIdAsync(IList<string> categoryIds)
+        {
+            return _queryDispatcher.DispatchAsync<FetchProductsByCategoryIdsQuery, IDictionary<string, IList<IProduct>>>(new FetchProductsByCategoryIdsQuery
+            {
+                CategoryIds = categoryIds,
+            });
+        }
+
         public Task<IList<IProduct>> GetBySearchAsync(string searchTerm)
         {
             return _queryDispatcher.DispatchAsync<FetchProductsBySearchQuery, IList<IProduct>>(new FetchProductsBySearchQuery

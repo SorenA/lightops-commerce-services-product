@@ -13,6 +13,7 @@ namespace LightOps.Commerce.Services.Product.Api.Services
         Task<IList<IProduct>> GetByHandleAsync(IList<string> handles);
 
         Task<IList<IProduct>> GetByCategoryIdAsync(string categoryId);
+        Task<IDictionary<string, IList<IProduct>>> GetByCategoryIdAsync(IList<string> categoryIds);
 
         Task<IList<IProduct>> GetBySearchAsync(string searchTerm);
     }

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Service endpoint for fetching multiple products by ids or handles pluralized
 - Queries and query handlers for fetching multiple products by ids or handles pluralized
+- Service endpoint, queryies and query handlers for fetching multiple products by category ids
 
 ## [0.1.2] - 2020-07-16
 
