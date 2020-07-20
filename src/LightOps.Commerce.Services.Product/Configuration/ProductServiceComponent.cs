@@ -100,22 +100,30 @@ namespace LightOps.Commerce.Services.Product.Configuration
         internal enum QueryHandlers
         {
             CheckProductHealthQueryHandler,
-            FetchProductByHandleQueryHandler,
+
             FetchProductByIdQueryHandler,
-            FetchProductsByHandlesQueryHandler,
             FetchProductsByIdsQueryHandler,
+
+            FetchProductByHandleQueryHandler,
+            FetchProductsByHandlesQueryHandler,
+
             FetchProductsByCategoryIdQueryHandler,
+
             FetchProductsBySearchQueryHandler,
         }
 
         private readonly Dictionary<QueryHandlers, ServiceRegistration> _queryHandlers = new Dictionary<QueryHandlers, ServiceRegistration>
         {
             [QueryHandlers.CheckProductHealthQueryHandler] = ServiceRegistration.Transient<IQueryHandler<CheckProductHealthQuery, HealthStatus>>(),
-            [QueryHandlers.FetchProductByHandleQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductByHandleQuery, IProduct>>(),
+
             [QueryHandlers.FetchProductByIdQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductByIdQuery, IProduct>>(),
-            [QueryHandlers.FetchProductsByHandlesQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByHandlesQuery, IList<IProduct>>>(),
             [QueryHandlers.FetchProductsByIdsQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByIdsQuery, IList<IProduct>>>(),
+
+            [QueryHandlers.FetchProductByHandleQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductByHandleQuery, IProduct>>(),
+            [QueryHandlers.FetchProductsByHandlesQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByHandlesQuery, IList<IProduct>>>(),
+
             [QueryHandlers.FetchProductsByCategoryIdQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByCategoryIdQuery, IList<IProduct>>>(),
+
             [QueryHandlers.FetchProductsBySearchQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsBySearchQuery, IList<IProduct>>>(),
         };
 
@@ -125,27 +133,27 @@ namespace LightOps.Commerce.Services.Product.Configuration
             return this;
         }
 
-        public IProductServiceComponent OverrideFetchProductByHandleQueryHandler<T>() where T : IFetchProductByHandleQueryHandler
-        {
-            _queryHandlers[QueryHandlers.FetchProductByHandleQueryHandler].ImplementationType = typeof(T);
-            return this;
-        }
-
         public IProductServiceComponent OverrideFetchProductByIdQueryHandler<T>() where T : IFetchProductByIdQueryHandler
         {
             _queryHandlers[QueryHandlers.FetchProductByIdQueryHandler].ImplementationType = typeof(T);
             return this;
         }
 
-        public IProductServiceComponent OverrideFetchProductsByHandlesQueryHandler<T>() where T : IFetchProductsByHandlesQueryHandler
-        {
-            _queryHandlers[QueryHandlers.FetchProductsByHandlesQueryHandler].ImplementationType = typeof(T);
-            return this;
-        }
-
         public IProductServiceComponent OverrideFetchProductsByIdsQueryHandler<T>() where T : IFetchProductsByIdsQueryHandler
         {
             _queryHandlers[QueryHandlers.FetchProductsByIdsQueryHandler].ImplementationType = typeof(T);
+            return this;
+        }
+
+        public IProductServiceComponent OverrideFetchProductByHandleQueryHandler<T>() where T : IFetchProductByHandleQueryHandler
+        {
+            _queryHandlers[QueryHandlers.FetchProductByHandleQueryHandler].ImplementationType = typeof(T);
+            return this;
+        }
+
+        public IProductServiceComponent OverrideFetchProductsByHandlesQueryHandler<T>() where T : IFetchProductsByHandlesQueryHandler
+        {
+            _queryHandlers[QueryHandlers.FetchProductsByHandlesQueryHandler].ImplementationType = typeof(T);
             return this;
         }
 

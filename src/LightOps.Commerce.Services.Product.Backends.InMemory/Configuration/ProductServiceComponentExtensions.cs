@@ -23,10 +23,10 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Configuration
             // Override query handlers
             serviceComponent
                 .OverrideCheckProductHealthQueryHandler<CheckProductHealthQueryHandler>()
-                .OverrideFetchProductByHandleQueryHandler<FetchProductByHandleQueryHandler>()
                 .OverrideFetchProductByIdQueryHandler<FetchProductByIdQueryHandler>()
-                .OverrideFetchProductsByHandlesQueryHandler<FetchProductsByHandlesQueryHandler>()
                 .OverrideFetchProductsByIdsQueryHandler<FetchProductsByIdsQueryHandler>()
+                .OverrideFetchProductByHandleQueryHandler<FetchProductByHandleQueryHandler>()
+                .OverrideFetchProductsByHandlesQueryHandler<FetchProductsByHandlesQueryHandler>()
                 .OverrideFetchProductsByCategoryIdQueryHandler<FetchProductsByCategoryIdQueryHandler>()
                 .OverrideFetchProductsBySearchQueryHandler<FetchProductsBySearchQueryHandler>();
 

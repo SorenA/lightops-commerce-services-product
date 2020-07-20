@@ -24,19 +24,19 @@ namespace LightOps.Commerce.Services.Product.Domain.Services
             });
         }
 
-        public Task<IProduct> GetByHandleAsync(string handle)
-        {
-            return _queryDispatcher.DispatchAsync<FetchProductByHandleQuery, IProduct>(new FetchProductByHandleQuery
-            {
-                Handle = handle,
-            });
-        }
-
         public Task<IList<IProduct>> GetByIdAsync(IList<string> ids)
         {
             return _queryDispatcher.DispatchAsync<FetchProductsByIdsQuery, IList<IProduct>>(new FetchProductsByIdsQuery
             {
                 Ids = ids,
+            });
+        }
+
+        public Task<IProduct> GetByHandleAsync(string handle)
+        {
+            return _queryDispatcher.DispatchAsync<FetchProductByHandleQuery, IProduct>(new FetchProductByHandleQuery
+            {
+                Handle = handle,
             });
         }
 
