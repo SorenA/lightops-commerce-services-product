@@ -102,8 +102,8 @@ namespace LightOps.Commerce.Services.Product.Configuration
             CheckProductHealthQueryHandler,
             FetchProductByHandleQueryHandler,
             FetchProductByIdQueryHandler,
-            FetchProductsByHandleQueryHandler,
-            FetchProductsByIdQueryHandler,
+            FetchProductsByHandlesQueryHandler,
+            FetchProductsByIdsQueryHandler,
             FetchProductsByCategoryIdQueryHandler,
             FetchProductsBySearchQueryHandler,
         }
@@ -113,8 +113,8 @@ namespace LightOps.Commerce.Services.Product.Configuration
             [QueryHandlers.CheckProductHealthQueryHandler] = ServiceRegistration.Transient<IQueryHandler<CheckProductHealthQuery, HealthStatus>>(),
             [QueryHandlers.FetchProductByHandleQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductByHandleQuery, IProduct>>(),
             [QueryHandlers.FetchProductByIdQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductByIdQuery, IProduct>>(),
-            [QueryHandlers.FetchProductsByHandleQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByHandleQuery, IList<IProduct>>>(),
-            [QueryHandlers.FetchProductsByIdQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByIdQuery, IList<IProduct>>>(),
+            [QueryHandlers.FetchProductsByHandlesQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByHandlesQuery, IList<IProduct>>>(),
+            [QueryHandlers.FetchProductsByIdsQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByIdsQuery, IList<IProduct>>>(),
             [QueryHandlers.FetchProductsByCategoryIdQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByCategoryIdQuery, IList<IProduct>>>(),
             [QueryHandlers.FetchProductsBySearchQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsBySearchQuery, IList<IProduct>>>(),
         };
@@ -137,15 +137,15 @@ namespace LightOps.Commerce.Services.Product.Configuration
             return this;
         }
 
-        public IProductServiceComponent OverrideFetchProductsByHandleQueryHandler<T>() where T : IFetchProductsByHandleQueryHandler
+        public IProductServiceComponent OverrideFetchProductsByHandlesQueryHandler<T>() where T : IFetchProductsByHandlesQueryHandler
         {
-            _queryHandlers[QueryHandlers.FetchProductsByHandleQueryHandler].ImplementationType = typeof(T);
+            _queryHandlers[QueryHandlers.FetchProductsByHandlesQueryHandler].ImplementationType = typeof(T);
             return this;
         }
 
-        public IProductServiceComponent OverrideFetchProductsByIdQueryHandler<T>() where T : IFetchProductsByIdQueryHandler
+        public IProductServiceComponent OverrideFetchProductsByIdsQueryHandler<T>() where T : IFetchProductsByIdsQueryHandler
         {
-            _queryHandlers[QueryHandlers.FetchProductsByIdQueryHandler].ImplementationType = typeof(T);
+            _queryHandlers[QueryHandlers.FetchProductsByIdsQueryHandler].ImplementationType = typeof(T);
             return this;
         }
 

@@ -5,7 +5,7 @@ using LightOps.CQRS.Api.Queries;
 
 namespace LightOps.Commerce.Services.Product.Api.QueryHandlers
 {
-    public interface IFetchProductsByHandleQueryHandler : IQueryHandler<FetchProductsByHandleQuery, IList<IProduct>>
+    public interface IFetchProductsByHandlesQueryHandler : IQueryHandler<FetchProductsByHandlesQuery, IList<IProduct>>
     {
 
     }

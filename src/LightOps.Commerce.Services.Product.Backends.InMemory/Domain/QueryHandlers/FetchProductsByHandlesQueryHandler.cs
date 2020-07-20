@@ -8,20 +8,20 @@ using LightOps.Commerce.Services.Product.Backends.InMemory.Api.Providers;
 
 namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandlers
 {
-    public class FetchProductsByIdQueryHandler : IFetchProductsByIdQueryHandler
+    public class FetchProductsByHandlesQueryHandler : IFetchProductsByHandlesQueryHandler
     {
         private readonly IInMemoryProductProvider _inMemoryProductProvider;
 
-        public FetchProductsByIdQueryHandler(IInMemoryProductProvider inMemoryProductProvider)
+        public FetchProductsByHandlesQueryHandler(IInMemoryProductProvider inMemoryProductProvider)
         {
             _inMemoryProductProvider = inMemoryProductProvider;
         }
 
-        public Task<IList<IProduct>> HandleAsync(FetchProductsByIdQuery query)
+        public Task<IList<IProduct>> HandleAsync(FetchProductsByHandlesQuery query)
         {
             var products = _inMemoryProductProvider
                 .Products
-                .Where(c => query.Ids.Contains(c.Id))
+                .Where(c => query.Handles.Contains(c.Handle))
                 .ToList();
 
             return Task.FromResult<IList<IProduct>>(products);
