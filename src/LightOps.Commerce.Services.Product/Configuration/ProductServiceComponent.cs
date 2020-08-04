@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using LightOps.Commerce.Proto.Types;
 using LightOps.Commerce.Services.Product.Api.Models;
 using LightOps.Commerce.Services.Product.Api.Queries;
 using LightOps.Commerce.Services.Product.Api.QueryHandlers;
+using LightOps.Commerce.Services.Product.Api.QueryResults;
 using LightOps.Commerce.Services.Product.Api.Services;
-using LightOps.Commerce.Services.Product.Domain.Mappers.V1;
+using LightOps.Commerce.Services.Product.Domain.Mappers;
 using LightOps.Commerce.Services.Product.Domain.Services;
 using LightOps.CQRS.Api.Queries;
 using LightOps.DependencyInjection.Api.Configuration;
@@ -59,39 +61,41 @@ namespace LightOps.Commerce.Services.Product.Configuration
         #region Mappers
         internal enum Mappers
         {
-            ProtoMoneyMapperV1,
-            ProtoProductMapperV1,
-            ProtoProductVariantMapperV1,
+            ProductProtoMapper,
+            ProductVariantProtoMapper,
+            ImageProtoMapper,
+            MoneyProtoMapper,
         }
 
         private readonly Dictionary<Mappers, ServiceRegistration> _mappers = new Dictionary<Mappers, ServiceRegistration>
         {
-            [Mappers.ProtoMoneyMapperV1] = ServiceRegistration
-                .Transient<IMapper<Money, Proto.Services.Product.V1.ProtoMoney>, ProtoMoneyMapper>(),
-            [Mappers.ProtoProductMapperV1] = ServiceRegistration
-                .Transient<IMapper<IProduct, Proto.Services.Product.V1.ProtoProduct>, ProtoProductMapper>(),
-            [Mappers.ProtoProductVariantMapperV1] = ServiceRegistration
-                .Transient<IMapper<IProductVariant, Proto.Services.Product.V1.ProtoProductVariant>, ProtoProductVariantMapper>(),
+            [Mappers.ProductProtoMapper] = ServiceRegistration.Transient<IMapper<IProduct, ProductProto>, ProductProtoMapper>(),
+            [Mappers.ProductVariantProtoMapper] = ServiceRegistration.Transient<IMapper<IProductVariant, ProductVariantProto>, ProductVariantProtoMapper>(),
+            [Mappers.ImageProtoMapper] = ServiceRegistration.Transient<IMapper<IImage, ImageProto>, ImageProtoMapper>(),
+            [Mappers.MoneyProtoMapper] = ServiceRegistration.Transient<IMapper<Money, MoneyProto>, MoneyProtoMapper>(),
         };
 
-        public IProductServiceComponent OverrideProtoMoneyMapperV1<T>()
-            where T : IMapper<Money, Proto.Services.Product.V1.ProtoMoney>
+        public IProductServiceComponent OverrideProductProtoMapper<T>() where T : IMapper<IProduct, ProductProto>
         {
-            _mappers[Mappers.ProtoMoneyMapperV1].ImplementationType = typeof(T);
+            _mappers[Mappers.ProductProtoMapper].ImplementationType = typeof(T);
             return this;
         }
 
-        public IProductServiceComponent OverrideProtoProductMapperV1<T>()
-            where T : IMapper<IProduct, Proto.Services.Product.V1.ProtoProduct>
+        public IProductServiceComponent OverrideProductVariantProtoMapper<T>() where T : IMapper<IProductVariant, ProductVariantProto>
         {
-            _mappers[Mappers.ProtoProductMapperV1].ImplementationType = typeof(T);
+            _mappers[Mappers.ProductVariantProtoMapper].ImplementationType = typeof(T);
             return this;
         }
 
-        public IProductServiceComponent OverrideProtoProductVariantMapperV1<T>()
-            where T : IMapper<IProductVariant, Proto.Services.Product.V1.ProtoProductVariant>
+        public IProductServiceComponent OverrideImageProtoMapper<T>() where T : IMapper<IImage, ImageProto>
         {
-            _mappers[Mappers.ProtoProductVariantMapperV1].ImplementationType = typeof(T);
+            _mappers[Mappers.ImageProtoMapper].ImplementationType = typeof(T);
+            return this;
+        }
+
+        public IProductServiceComponent OverrideMoneyProtoMapper<T>() where T : IMapper<Money, MoneyProto>
+        {
+            _mappers[Mappers.MoneyProtoMapper].ImplementationType = typeof(T);
             return this;
         }
         #endregion Mappers
@@ -101,15 +105,8 @@ namespace LightOps.Commerce.Services.Product.Configuration
         {
             CheckProductHealthQueryHandler,
 
-            FetchProductByIdQueryHandler,
-            FetchProductsByIdsQueryHandler,
-
-            FetchProductByHandleQueryHandler,
             FetchProductsByHandlesQueryHandler,
-
-            FetchProductsByCategoryIdQueryHandler,
-            FetchProductsByCategoryIdsQueryHandler,
-
+            FetchProductsByIdsQueryHandler,
             FetchProductsBySearchQueryHandler,
         }
 
@@ -117,39 +114,14 @@ namespace LightOps.Commerce.Services.Product.Configuration
         {
             [QueryHandlers.CheckProductHealthQueryHandler] = ServiceRegistration.Transient<IQueryHandler<CheckProductHealthQuery, HealthStatus>>(),
 
-            [QueryHandlers.FetchProductByIdQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductByIdQuery, IProduct>>(),
-            [QueryHandlers.FetchProductsByIdsQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByIdsQuery, IList<IProduct>>>(),
-
-            [QueryHandlers.FetchProductByHandleQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductByHandleQuery, IProduct>>(),
             [QueryHandlers.FetchProductsByHandlesQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByHandlesQuery, IList<IProduct>>>(),
-
-            [QueryHandlers.FetchProductsByCategoryIdQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByCategoryIdQuery, IList<IProduct>>>(),
-            [QueryHandlers.FetchProductsByCategoryIdsQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByCategoryIdsQuery, IDictionary<string, IList<IProduct>>>>(),
-
-            [QueryHandlers.FetchProductsBySearchQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsBySearchQuery, IList<IProduct>>>(),
+            [QueryHandlers.FetchProductsByIdsQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsByIdsQuery, IList<IProduct>>>(),
+            [QueryHandlers.FetchProductsBySearchQueryHandler] = ServiceRegistration.Transient<IQueryHandler<FetchProductsBySearchQuery, SearchResult<IProduct>>>(),
         };
 
         public IProductServiceComponent OverrideCheckProductHealthQueryHandler<T>() where T : ICheckProductHealthQueryHandler
         {
             _queryHandlers[QueryHandlers.CheckProductHealthQueryHandler].ImplementationType = typeof(T);
-            return this;
-        }
-
-        public IProductServiceComponent OverrideFetchProductByIdQueryHandler<T>() where T : IFetchProductByIdQueryHandler
-        {
-            _queryHandlers[QueryHandlers.FetchProductByIdQueryHandler].ImplementationType = typeof(T);
-            return this;
-        }
-
-        public IProductServiceComponent OverrideFetchProductsByIdsQueryHandler<T>() where T : IFetchProductsByIdsQueryHandler
-        {
-            _queryHandlers[QueryHandlers.FetchProductsByIdsQueryHandler].ImplementationType = typeof(T);
-            return this;
-        }
-
-        public IProductServiceComponent OverrideFetchProductByHandleQueryHandler<T>() where T : IFetchProductByHandleQueryHandler
-        {
-            _queryHandlers[QueryHandlers.FetchProductByHandleQueryHandler].ImplementationType = typeof(T);
             return this;
         }
 
@@ -159,15 +131,9 @@ namespace LightOps.Commerce.Services.Product.Configuration
             return this;
         }
 
-        public IProductServiceComponent OverrideFetchProductsByCategoryIdQueryHandler<T>() where T : IFetchProductsByCategoryIdQueryHandler
+        public IProductServiceComponent OverrideFetchProductsByIdsQueryHandler<T>() where T : IFetchProductsByIdsQueryHandler
         {
-            _queryHandlers[QueryHandlers.FetchProductsByCategoryIdQueryHandler].ImplementationType = typeof(T);
-            return this;
-        }
-
-        public IProductServiceComponent OverrideFetchProductsByCategoryIdsQueryHandler<T>() where T : IFetchProductsByCategoryIdsQueryHandler
-        {
-            _queryHandlers[QueryHandlers.FetchProductsByCategoryIdsQueryHandler].ImplementationType = typeof(T);
+            _queryHandlers[QueryHandlers.FetchProductsByIdsQueryHandler].ImplementationType = typeof(T);
             return this;
         }
 

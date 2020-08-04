@@ -1,4 +1,5 @@
-﻿using LightOps.Commerce.Services.Product.Api.Models;
+﻿using LightOps.Commerce.Proto.Types;
+using LightOps.Commerce.Services.Product.Api.Models;
 using LightOps.Commerce.Services.Product.Api.QueryHandlers;
 using LightOps.Commerce.Services.Product.Api.Services;
 using LightOps.Mapping.Api.Mappers;
@@ -14,23 +15,17 @@ namespace LightOps.Commerce.Services.Product.Configuration
         #endregion Services
 
         #region Mappers
-        IProductServiceComponent OverrideProtoMoneyMapperV1<T>() where T : IMapper<Money, Proto.Services.Product.V1.ProtoMoney>;
-        IProductServiceComponent OverrideProtoProductMapperV1<T>() where T : IMapper<IProduct, Proto.Services.Product.V1.ProtoProduct>;
-        IProductServiceComponent OverrideProtoProductVariantMapperV1<T>() where T : IMapper<IProductVariant, Proto.Services.Product.V1.ProtoProductVariant>;
+        IProductServiceComponent OverrideProductProtoMapper<T>() where T : IMapper<IProduct, ProductProto>;
+        IProductServiceComponent OverrideProductVariantProtoMapper<T>() where T : IMapper<IProductVariant, ProductVariantProto>;
+        IProductServiceComponent OverrideImageProtoMapper<T>() where T : IMapper<IImage, ImageProto>;
+        IProductServiceComponent OverrideMoneyProtoMapper<T>() where T : IMapper<Money, MoneyProto>;
         #endregion Mappers
 
         #region Query Handlers
         IProductServiceComponent OverrideCheckProductHealthQueryHandler<T>() where T : ICheckProductHealthQueryHandler;
 
-        IProductServiceComponent OverrideFetchProductByIdQueryHandler<T>() where T : IFetchProductByIdQueryHandler;
-        IProductServiceComponent OverrideFetchProductsByIdsQueryHandler<T>() where T : IFetchProductsByIdsQueryHandler;
-
-        IProductServiceComponent OverrideFetchProductByHandleQueryHandler<T>() where T : IFetchProductByHandleQueryHandler;
         IProductServiceComponent OverrideFetchProductsByHandlesQueryHandler<T>() where T : IFetchProductsByHandlesQueryHandler;
-
-        IProductServiceComponent OverrideFetchProductsByCategoryIdQueryHandler<T>() where T : IFetchProductsByCategoryIdQueryHandler;
-        IProductServiceComponent OverrideFetchProductsByCategoryIdsQueryHandler<T>() where T : IFetchProductsByCategoryIdsQueryHandler;
-
+        IProductServiceComponent OverrideFetchProductsByIdsQueryHandler<T>() where T : IFetchProductsByIdsQueryHandler;
         IProductServiceComponent OverrideFetchProductsBySearchQueryHandler<T>() where T : IFetchProductsBySearchQueryHandler;
         #endregion Query Handlers
     }

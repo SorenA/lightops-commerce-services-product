@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
-using LightOps.Commerce.Proto.Services.Health.V1;
+using LightOps.Commerce.Proto.Grpc.Health;
 using LightOps.Commerce.Services.Product.Api.Services;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 
-namespace LightOps.Commerce.Services.Product.Domain.Services.V1
+namespace LightOps.Commerce.Services.Product.Domain.Services.Grpc
 {
     public class HealthGrpcService : Health.HealthBase
     {
@@ -30,7 +30,7 @@ namespace LightOps.Commerce.Services.Product.Domain.Services.V1
                 var statusMap = new Dictionary<string, HealthCheckResponse.Types.ServingStatus>();
 
                 // Check all services
-                statusMap.Add("service.product.v1.ProtoProductService", await GetProductServiceStatusAsync());
+                statusMap.Add("lightops.service.ProductProtoService", await GetProductServiceStatusAsync());
 
                 return new HealthCheckResponse
                 {
@@ -43,7 +43,7 @@ namespace LightOps.Commerce.Services.Product.Domain.Services.V1
             var servingStatus = HealthCheckResponse.Types.ServingStatus.Unknown;
             switch (request.Service)
             {
-                case "service.product.v1.ProtoProductService":
+                case "lightops.service.ProductProtoService":
                     servingStatus = await GetProductServiceStatusAsync();
                     break;
                 default:
