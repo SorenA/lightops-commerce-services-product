@@ -17,9 +17,9 @@ Provides gRPC services for integrations into other services.
 
 Protobuf service definitions located at [SorenA/lightops-commerce-proto](https://github.com/SorenA/lightops-commerce-proto).
 
-Product v1 is implemented in `Domain.Services.V1.ProductGrpcService`.
+Product is implemented in `Domain.Services.Grpc.ProductGrpcService`.
 
-Health v1 is implemented in `Domain.Services.V1.HealthGrpcService`.
+Health is implemented in `Domain.Services.Grpc.HealthGrpcService`.
 
 ### Health-check
 
@@ -29,7 +29,7 @@ Available services are as follows
 
 ```bash
 service = '' - System as a whole
-service = 'service.product.v1.ProtoProductService' - Product v1
+service = 'lightops.service.ProductProtoService' - Product
 ```
 
 For embedding a gRPC client for use with Kubernetes, see [grpc-ecosystem/grpc-health-probe](https://github.com/grpc-ecosystem/grpc-health-probe)
@@ -99,23 +99,17 @@ public interface IProductServiceComponent
     #endregion Services
 
     #region Mappers
-    IProductServiceComponent OverrideProtoMoneyMapperV1<T>() where T : IMapper<Money, Proto.Services.Product.V1.ProtoMoney>;
-    IProductServiceComponent OverrideProtoProductMapperV1<T>() where T : IMapper<IProduct, Proto.Services.Product.V1.ProtoProduct>;
-    IProductServiceComponent OverrideProtoProductVariantMapperV1<T>() where T : IMapper<IProductVariant, Proto.Services.Product.V1.ProtoProductVariant>;
+    IProductServiceComponent OverrideProductProtoMapper<T>() where T : IMapper<IProduct, ProductProto>;
+    IProductServiceComponent OverrideProductVariantProtoMapper<T>() where T : IMapper<IProductVariant, ProductVariantProto>;
+    IProductServiceComponent OverrideImageProtoMapper<T>() where T : IMapper<IImage, ImageProto>;
+    IProductServiceComponent OverrideMoneyProtoMapper<T>() where T : IMapper<Money, MoneyProto>;
     #endregion Mappers
 
     #region Query Handlers
     IProductServiceComponent OverrideCheckProductHealthQueryHandler<T>() where T : ICheckProductHealthQueryHandler;
 
-    IProductServiceComponent OverrideFetchProductByIdQueryHandler<T>() where T : IFetchProductByIdQueryHandler;
-    IProductServiceComponent OverrideFetchProductsByIdsQueryHandler<T>() where T : IFetchProductsByIdsQueryHandler;
-
-    IProductServiceComponent OverrideFetchProductByHandleQueryHandler<T>() where T : IFetchProductByHandleQueryHandler;
     IProductServiceComponent OverrideFetchProductsByHandlesQueryHandler<T>() where T : IFetchProductsByHandlesQueryHandler;
-
-    IProductServiceComponent OverrideFetchProductsByCategoryIdQueryHandler<T>() where T : IFetchProductsByCategoryIdQueryHandler;
-    IProductServiceComponent OverrideFetchProductsByCategoryIdsQueryHandler<T>() where T : IFetchProductsByCategoryIdsQueryHandler;
-
+    IProductServiceComponent OverrideFetchProductsByIdsQueryHandler<T>() where T : IFetchProductsByIdsQueryHandler;
     IProductServiceComponent OverrideFetchProductsBySearchQueryHandler<T>() where T : IFetchProductsBySearchQueryHandler;
     #endregion Query Handlers
 }
