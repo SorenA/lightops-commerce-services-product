@@ -61,10 +61,10 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
             {
                 inMemoryQuery = inMemoryQuery
                     .Where(x =>
-                        (string.IsNullOrWhiteSpace(x.Title) || x.Title.ToLowerInvariant().Contains(searchTerm))
-                        || (string.IsNullOrWhiteSpace(x.Description) || x.Description.ToLowerInvariant().Contains(searchTerm))
+                        (!string.IsNullOrWhiteSpace(x.Title) && x.Title.ToLowerInvariant().Contains(searchTerm))
+                        || (!string.IsNullOrWhiteSpace(x.Description) && x.Description.ToLowerInvariant().Contains(searchTerm))
                         || x.Variants.Any(v =>
-                            string.IsNullOrWhiteSpace(v.Title) || v.Title.ToLowerInvariant().Contains(searchTerm)));
+                            !string.IsNullOrWhiteSpace(v.Title) && v.Title.ToLowerInvariant().Contains(searchTerm)));
             }
 
             // Get total results
