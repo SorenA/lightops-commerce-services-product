@@ -31,7 +31,7 @@ namespace LightOps.Commerce.Services.Product.Api.Services
         /// <param name="pageSize">The page size to use</param>
         /// <param name="sortKey">Sort the underlying list by the given key</param>
         /// <param name="reverse">Whether to reverse the order of the underlying list</param>
-        /// <returns></returns>
+        /// <returns>Search result with products matching search</returns>
         Task<SearchResult<IProduct>> GetBySearchAsync(string searchTerm,
                                                       string categoryId,
                                                       string pageCursor,
