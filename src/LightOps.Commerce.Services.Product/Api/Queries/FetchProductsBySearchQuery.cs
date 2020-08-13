@@ -6,7 +6,7 @@ namespace LightOps.Commerce.Services.Product.Api.Queries
     public class FetchProductsBySearchQuery : IQuery
     {
         /// <summary>
-        /// The term to search for
+        /// The term to search for, if any
         /// </summary>
         public string SearchTerm { get; set; }
 

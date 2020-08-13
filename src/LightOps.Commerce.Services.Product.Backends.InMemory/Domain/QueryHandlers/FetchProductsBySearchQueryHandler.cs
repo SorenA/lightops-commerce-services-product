@@ -22,7 +22,6 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
         
         public Task<SearchResult<IProduct>> HandleAsync(FetchProductsBySearchQuery query)
         {
-            var searchTerm = query.SearchTerm.ToLowerInvariant();
 
             var inMemoryQuery = _inMemoryProductProvider.Products
                 .AsQueryable();
@@ -57,8 +56,9 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
             }
 
             // Search in list
-            if (query.SearchTerm != "*")
+            if (!string.IsNullOrEmpty(query.SearchTerm))
             {
+                var searchTerm = query.SearchTerm.ToLowerInvariant();
                 inMemoryQuery = inMemoryQuery
                     .Where(x =>
                         (!string.IsNullOrWhiteSpace(x.Title) && x.Title.ToLowerInvariant().Contains(searchTerm))
@@ -72,6 +72,7 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
 
             // Paginate - Skip
             var nodeId = DecodeCursor(query.PageCursor);
+            var remainingResultsPrePagination = inMemoryQuery.Count();
             if (!string.IsNullOrEmpty(nodeId))
             {
                 // Skip until we reach cursor, then one more for next page
@@ -86,16 +87,24 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
             // Paginate - Take
             var results = inMemoryQuery
                 .Take(query.PageSize)
+                .Select(x => new CursorNodeResult<IProduct>
+                {
+                    Cursor = EncodeCursor(x.Id),
+                    Node = x,
+                })
                 .ToList();
 
-            // Generate next page cursor
-            var nextPageCursor = EncodeCursor(results.LastOrDefault()?.Id);
+            // Get cursors
+            var startCursor = results.FirstOrDefault()?.Cursor;
+            var endCursor = results.LastOrDefault()?.Cursor;
 
             var searchResult = new SearchResult<IProduct>
             {
                 Results = results,
-                NextPageCursor = nextPageCursor,
+                StartCursor = startCursor,
+                EndCursor = endCursor,
                 HasNextPage = remainingResults > query.PageSize,
+                HasPreviousPage = remainingResultsPrePagination != remainingResults,
                 TotalResults = totalResults,
             };
 
