@@ -14,26 +14,20 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Configuration
 
         public IReadOnlyList<ServiceRegistration> GetServiceRegistrations()
         {
-            // Populate in-memory providers
-            _providers[Providers.InMemoryProductProvider].ImplementationInstance = new InMemoryProductProvider
-            {
-                Products = _products,
-            };
-
             return new List<ServiceRegistration>()
                 .Union(_providers.Values)
                 .ToList();
         }
 
         #region Entities
-        private readonly IList<IProduct> _products = new List<IProduct>();
-
         public IInMemoryProductServiceBackendComponent UseProducts(IList<IProduct> products)
         {
-            foreach (var product in products)
+            // Populate in-memory providers
+            _providers[Providers.InMemoryProductProvider].ImplementationType = null;
+            _providers[Providers.InMemoryProductProvider].ImplementationInstance = new InMemoryProductProvider
             {
-                _products.Add(product);
-            }
+                Products = products,
+            };
 
             return this;
         }
@@ -47,8 +41,15 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Configuration
 
         private readonly Dictionary<Providers, ServiceRegistration> _providers = new Dictionary<Providers, ServiceRegistration>
         {
-            [Providers.InMemoryProductProvider] = ServiceRegistration.Singleton<IInMemoryProductProvider>(),
+            [Providers.InMemoryProductProvider] = ServiceRegistration.Singleton<IInMemoryProductProvider, InMemoryProductProvider>(),
         };
+
+        public IInMemoryProductServiceBackendComponent OverrideProductProvider<T>() where T : IInMemoryProductProvider
+        {
+            _providers[Providers.InMemoryProductProvider].ImplementationInstance = null;
+            _providers[Providers.InMemoryProductProvider].ImplementationType = typeof(T);
+            return this;
+        }
         #endregion Providers
     }
 }

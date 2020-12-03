@@ -20,11 +20,11 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
         public Task<IList<IProduct>> HandleAsync(FetchProductsByIdsQuery query)
         {
             var products = _inMemoryProductProvider
-                .Products
+                .Products?
                 .Where(c => query.Ids.Contains(c.Id))
                 .ToList();
 
-            return Task.FromResult<IList<IProduct>>(products);
+            return Task.FromResult<IList<IProduct>>(products ?? new List<IProduct>());
         }
     }
 }

@@ -23,8 +23,9 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
         public Task<SearchResult<IProduct>> HandleAsync(FetchProductsBySearchQuery query)
         {
 
-            var inMemoryQuery = _inMemoryProductProvider.Products
-                .AsQueryable();
+            var inMemoryQuery = _inMemoryProductProvider
+                .Products?
+                .AsQueryable() ?? new EnumerableQuery<IProduct>(new List<IProduct>());
 
             // Sort underlying list
             switch (query.SortKey)

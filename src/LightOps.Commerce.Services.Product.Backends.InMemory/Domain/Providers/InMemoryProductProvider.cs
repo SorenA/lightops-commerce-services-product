@@ -6,6 +6,6 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.Providers
 {
     public class InMemoryProductProvider : IInMemoryProductProvider
     {
-        public IList<IProduct> Products { get; internal set; }
+        public IList<IProduct> Products { get; internal set; } = new List<IProduct>();
     }
 }
