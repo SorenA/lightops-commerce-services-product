@@ -30,7 +30,6 @@ namespace LightOps.Commerce.Services.Product.Api.Models
         /// </summary>
         Money UnitPrice { get; set; }
 
-
         /// <summary>
         /// The images of the product variant
         /// </summary>

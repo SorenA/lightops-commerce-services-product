@@ -13,6 +13,8 @@ namespace LightOps.Commerce.Services.Product.Domain.Mappers
                 Id = src.Id,
                 Url = src.Url,
                 AltText = src.AltText,
+                FocalCenterTop = src.FocalCenterTop,
+                FocalCenterLeft = src.FocalCenterLeft,
             };
         }
     }
