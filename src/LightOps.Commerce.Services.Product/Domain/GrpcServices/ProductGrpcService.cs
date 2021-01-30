@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace LightOps.Commerce.Services.Product.Domain.GrpcServices
 {
-    public class ProductGrpcService : ProductProtoService.ProductProtoServiceBase
+    public class ProductGrpcService : ProductService.ProductServiceBase
     {
         private readonly ILogger<ProductGrpcService> _logger;
         private readonly ICommandDispatcher _commandDispatcher;

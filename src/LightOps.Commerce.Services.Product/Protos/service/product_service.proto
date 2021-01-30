@@ -7,7 +7,7 @@ option csharp_namespace = "LightOps.Commerce.Proto.Services";
 import "google/protobuf/wrappers.proto";
 import "Protos/type/product.proto";
 
-service ProductProtoService {
+service ProductService {
   // Persists a product
   rpc Persist(PersistRequest) returns (PersistResponse) {}
 
