@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using LightOps.Commerce.Services.Product.Api.Models;
 using LightOps.Commerce.Services.Product.Backends.InMemory.Api.Providers;
 
 namespace LightOps.Commerce.Services.Product.Backends.InMemory.Configuration
@@ -7,7 +6,7 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Configuration
     public interface IInMemoryProductServiceBackendComponent
     {
         #region Entities
-        IInMemoryProductServiceBackendComponent UseProducts(IList<IProduct> products);
+        IInMemoryProductServiceBackendComponent UseProducts(IList<Proto.Types.Product> products);
         #endregion Entities
 
         #region Providers

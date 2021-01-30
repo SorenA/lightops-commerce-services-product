@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using LightOps.Commerce.Services.Product.Api.Models;
 using LightOps.Commerce.Services.Product.Backends.InMemory.Api.Providers;
 using LightOps.Commerce.Services.Product.Backends.InMemory.Domain.Providers;
 using LightOps.DependencyInjection.Api.Configuration;
@@ -20,7 +19,7 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Configuration
         }
 
         #region Entities
-        public IInMemoryProductServiceBackendComponent UseProducts(IList<IProduct> products)
+        public IInMemoryProductServiceBackendComponent UseProducts(IList<Proto.Types.Product> products)
         {
             // Populate in-memory providers
             _providers[Providers.InMemoryProductProvider].ImplementationType = null;

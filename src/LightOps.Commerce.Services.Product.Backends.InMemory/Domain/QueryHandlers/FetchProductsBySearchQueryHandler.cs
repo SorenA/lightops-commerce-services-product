@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LightOps.Commerce.Services.Product.Api.Enums;
-using LightOps.Commerce.Services.Product.Api.Models;
+using LightOps.Commerce.Proto.Services;
 using LightOps.Commerce.Services.Product.Api.Queries;
 using LightOps.Commerce.Services.Product.Api.QueryHandlers;
 using LightOps.Commerce.Services.Product.Api.QueryResults;
@@ -20,27 +19,51 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
             _inMemoryProductProvider = inMemoryProductProvider;
         }
         
-        public Task<SearchResult<IProduct>> HandleAsync(FetchProductsBySearchQuery query)
+        public Task<SearchResult<Proto.Types.Product>> HandleAsync(FetchProductsBySearchQuery query)
         {
 
             var inMemoryQuery = _inMemoryProductProvider
                 .Products?
-                .AsQueryable() ?? new EnumerableQuery<IProduct>(new List<IProduct>());
+                .AsQueryable() ?? new EnumerableQuery<Proto.Types.Product>(new List<Proto.Types.Product>());
+
+            // Match currency code if requested
+            if (!string.IsNullOrEmpty(query.CurrencyCode))
+            {
+                // Limit to products with at least one variant with a matching unit price
+                inMemoryQuery = inMemoryQuery
+                    .Where(x => x.Variants
+                        .Any(v => v.UnitPrices
+                            .Any(p => p.CurrencyCode == query.CurrencyCode)));
+            }
 
             // Sort underlying list
             switch (query.SortKey)
             {
-                case ProductSortKey.Title:
-                    inMemoryQuery = inMemoryQuery.OrderBy(x => x.Title);
+                case GetBySearchRequest.Types.SortKey.Title:
+                    // Only possible when using a language code
+                    if (!string.IsNullOrEmpty(query.LanguageCode))
+                    {
+                        inMemoryQuery = inMemoryQuery.OrderBy(x => x.Titles
+                            .FirstOrDefault(l => l.LanguageCode == query.LanguageCode));
+                    }
                     break;
-                case ProductSortKey.CreatedAt:
+                case GetBySearchRequest.Types.SortKey.CreatedAt:
                     inMemoryQuery = inMemoryQuery.OrderBy(x => x.CreatedAt);
                     break;
-                case ProductSortKey.UpdatedAt:
+                case GetBySearchRequest.Types.SortKey.UpdatedAt:
                     inMemoryQuery = inMemoryQuery.OrderBy(x => x.UpdatedAt);
                     break;
-                case ProductSortKey.UnitPrice:
-                    inMemoryQuery = inMemoryQuery.OrderBy(x => x.Variants.Min(v => v.UnitPrice));
+                case GetBySearchRequest.Types.SortKey.UnitPrice:
+                    // Only possible when using a currency code
+                    if (!string.IsNullOrEmpty(query.CurrencyCode))
+                    {
+                        inMemoryQuery = inMemoryQuery.OrderBy(x =>
+                            x.Variants
+                                .Min(v => v.UnitPrices
+                                    .Where(p => p.CurrencyCode == query.CurrencyCode) // Match currency code
+                                    .Select(price => price.Units + price.Nanos / 1_000_000_000) // Convert to long
+                                    .FirstOrDefault()));
+                    }
                     break;
             }
 
@@ -59,13 +82,41 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
             // Search in list
             if (!string.IsNullOrEmpty(query.SearchTerm))
             {
-                var searchTerm = query.SearchTerm.ToLowerInvariant();
-                inMemoryQuery = inMemoryQuery
-                    .Where(x =>
-                        (!string.IsNullOrWhiteSpace(x.Title) && x.Title.ToLowerInvariant().Contains(searchTerm))
-                        || (!string.IsNullOrWhiteSpace(x.Description) && x.Description.ToLowerInvariant().Contains(searchTerm))
-                        || x.Variants.Any(v =>
-                            !string.IsNullOrWhiteSpace(v.Title) && v.Title.ToLowerInvariant().Contains(searchTerm)));
+                // Match language if requested
+                if (!string.IsNullOrEmpty(query.LanguageCode))
+                {
+                    inMemoryQuery = inMemoryQuery
+                        .Where(x =>
+                            x.Titles.Any(l =>
+                                l.LanguageCode == query.LanguageCode
+                                && l.Value.ToLowerInvariant().Contains(query.SearchTerm,
+                                    StringComparison.InvariantCultureIgnoreCase))
+                            || x.Descriptions.Any(l =>
+                                l.LanguageCode == query.LanguageCode
+                                && l.Value.ToLowerInvariant().Contains(query.SearchTerm,
+                                    StringComparison.InvariantCultureIgnoreCase))
+                            || x.Variants.Any(
+                                v => v.Titles.Any(l =>
+                                    l.LanguageCode == query.LanguageCode
+                                    && l.Value.ToLowerInvariant().Contains(query.SearchTerm,
+                                        StringComparison.InvariantCultureIgnoreCase))));
+                }
+                else
+                {
+                    // No language code, match all
+                    inMemoryQuery = inMemoryQuery
+                        .Where(x =>
+                            x.Titles.Any(l =>
+                                l.Value.ToLowerInvariant().Contains(query.SearchTerm,
+                                    StringComparison.InvariantCultureIgnoreCase))
+                            || x.Descriptions.Any(l =>
+                                l.Value.ToLowerInvariant().Contains(query.SearchTerm,
+                                    StringComparison.InvariantCultureIgnoreCase))
+                            || x.Variants.Any(
+                                v => v.Titles.Any(l =>
+                                    l.Value.ToLowerInvariant().Contains(query.SearchTerm,
+                                        StringComparison.InvariantCultureIgnoreCase))));
+                }
             }
 
             // Get total results
@@ -88,7 +139,7 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
             // Paginate - Take
             var results = inMemoryQuery
                 .Take(query.PageSize)
-                .Select(x => new CursorNodeResult<IProduct>
+                .Select(x => new CursorNodeResult<Proto.Types.Product>
                 {
                     Cursor = EncodeCursor(x.Id),
                     Node = x,
@@ -99,7 +150,7 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
             var startCursor = results.FirstOrDefault()?.Cursor;
             var endCursor = results.LastOrDefault()?.Cursor;
 
-            var searchResult = new SearchResult<IProduct>
+            var searchResult = new SearchResult<Proto.Types.Product>
             {
                 Results = results,
                 StartCursor = startCursor,

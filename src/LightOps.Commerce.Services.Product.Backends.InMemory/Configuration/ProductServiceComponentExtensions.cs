@@ -1,4 +1,5 @@
 ﻿using System;
+using LightOps.Commerce.Services.Product.Backends.InMemory.Domain.CommandHandlers;
 using LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandlers;
 using LightOps.Commerce.Services.Product.Configuration;
 using LightOps.DependencyInjection.Configuration;
@@ -20,9 +21,14 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Configuration
             // Attach to root component
             rootComponent.AttachComponent(component);
 
+            // Override command handlers
+            serviceComponent
+                .OverridePersistProductCommandHandler<PersistProductCommandHandler>()
+                .OverrideDeleteProductCommandHandler<DeleteProductCommandHandler>();
+
             // Override query handlers
             serviceComponent
-                .OverrideCheckProductHealthQueryHandler<CheckProductHealthQueryHandler>()
+                .OverrideCheckProductServiceHealthQueryHandler<CheckProductServiceHealthQueryHandler>()
                 .OverrideFetchProductsByHandlesQueryHandler<FetchProductsByHandlesQueryHandler>()
                 .OverrideFetchProductsByIdsQueryHandler<FetchProductsByIdsQueryHandler>()
                 .OverrideFetchProductsBySearchQueryHandler<FetchProductsBySearchQueryHandler>();

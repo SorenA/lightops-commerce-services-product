@@ -2,7 +2,7 @@
 
 namespace LightOps.Commerce.Services.Product.Api.Queries
 {
-    public class CheckProductHealthQuery : IQuery
+    public class CheckProductServiceHealthQuery : IQuery
     {
 
     }

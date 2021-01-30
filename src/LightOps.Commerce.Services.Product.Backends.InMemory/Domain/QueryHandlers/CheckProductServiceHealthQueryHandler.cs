@@ -6,16 +6,16 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandlers
 {
-    public class CheckProductHealthQueryHandler : ICheckProductHealthQueryHandler
+    public class CheckProductServiceHealthQueryHandler : ICheckProductServiceHealthQueryHandler
     {
         private readonly IInMemoryProductProvider _inMemoryProductProvider;
 
-        public CheckProductHealthQueryHandler(IInMemoryProductProvider inMemoryProductProvider)
+        public CheckProductServiceHealthQueryHandler(IInMemoryProductProvider inMemoryProductProvider)
         {
             _inMemoryProductProvider = inMemoryProductProvider;
         }
 
-        public Task<HealthStatus> HandleAsync(CheckProductHealthQuery query)
+        public Task<HealthStatus> HandleAsync(CheckProductServiceHealthQuery query)
         {
             return _inMemoryProductProvider.Products != null
                 ? Task.FromResult(HealthStatus.Healthy)
