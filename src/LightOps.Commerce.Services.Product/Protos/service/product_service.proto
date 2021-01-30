@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package lightops.service;
 
-option csharp_namespace = "LightOps.Commerce.Proto.Services";
+option csharp_namespace = "LightOps.Commerce.Proto.Services.Product";
 
 import "google/protobuf/wrappers.proto";
 import "Protos/type/product.proto";

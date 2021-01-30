@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LightOps.Commerce.Proto.Services;
+using LightOps.Commerce.Proto.Services.Product;
 using LightOps.Commerce.Services.Product.Api.Queries;
 using LightOps.Commerce.Services.Product.Api.QueryHandlers;
 using LightOps.Commerce.Services.Product.Api.QueryResults;

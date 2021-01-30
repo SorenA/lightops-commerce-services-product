@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Grpc.Core;
-using LightOps.Commerce.Proto.Services;
+using LightOps.Commerce.Proto.Services.Product;
 using LightOps.Commerce.Services.Product.Api.Commands;
 using LightOps.Commerce.Services.Product.Api.Queries;
 using LightOps.Commerce.Services.Product.Api.QueryResults;
