@@ -14,8 +14,8 @@ message Image {
   // The url where the image may be accessed
   string url = 2;
 
-  // The alt text of the image
-  repeated lightops.type.LocalizedString alt_text = 3;
+  // The localized alt texts of the image
+  repeated lightops.type.LocalizedString alt_texts = 3;
 
   // The focal center of the image from the top ranging 0-1
   google.protobuf.DoubleValue focal_center_top = 4;

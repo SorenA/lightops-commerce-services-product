@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Pluralize image alt text collection
+
 ## [0.5.2] - 2021-01-31
 
 ### Added

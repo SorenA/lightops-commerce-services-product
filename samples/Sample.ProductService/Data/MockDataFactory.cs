@@ -118,7 +118,7 @@ namespace Sample.ProductService.Data
                 .RuleFor(x => x.FocalCenterLeft, f => f.Random.Double(0, 1))
                 .FinishWith((f, x) =>
                 {
-                    x.AltText.AddRange(GetLocalizedStrings(f.Commerce.ProductAdjective()));
+                    x.AltTexts.AddRange(GetLocalizedStrings(f.Commerce.ProductAdjective()));
                 });
         }
 
