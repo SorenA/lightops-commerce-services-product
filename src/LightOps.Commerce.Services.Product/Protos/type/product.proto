@@ -51,6 +51,9 @@ message Product {
 
   // Whether or not the product is searchable
   bool is_searchable = 14;
+
+  // The sort order of the product when no sorting key is specified
+  int64 sort_order = 15;
 }
 
 message ProductVariant {
@@ -71,4 +74,15 @@ message ProductVariant {
 
   // The images of the product variant
   repeated lightops.type.Image images = 6;
+
+  // The sort order of the product variant when no sorting key is specified
+  int64 sort_order = 7;
+}
+
+enum ProductSortKey {
+  DEFAULT = 0;
+  TITLE = 1;
+  CREATED_AT = 2;
+  UPDATED_AT = 3;
+  UNIT_PRICE = 4;
 }

@@ -1,4 +1,4 @@
-﻿using LightOps.Commerce.Proto.Services.Product;
+﻿using LightOps.Commerce.Proto.Types;
 using LightOps.CQRS.Api.Queries;
 
 namespace LightOps.Commerce.Services.Product.Api.Queries
@@ -34,7 +34,7 @@ namespace LightOps.Commerce.Services.Product.Api.Queries
         /// <summary>
         /// Sort the underlying list by the given key
         /// </summary>
-        public GetBySearchRequest.Types.SortKey SortKey { get; set; }
+        public ProductSortKey SortKey { get; set; }
 
         /// <summary>
         /// Whether to reverse the order of the underlying list

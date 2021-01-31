@@ -9,9 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.2] - 2021-01-31
 
+### Added
+
+- Sort order on products for default sorting
+
 ### Changed
 
 - **Breaking** - Change protobuf service namespace to prevent message clashes when using multiple services
+- **Breaking** - Isolate search sort key enum
 
 ## [0.5.1] - 2021-01-30
 

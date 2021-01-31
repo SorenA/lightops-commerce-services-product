@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using LightOps.Commerce.Proto.Services.Product;
+using LightOps.Commerce.Proto.Types;
 using LightOps.Commerce.Services.Product.Api.Queries;
 using LightOps.Commerce.Services.Product.Api.QueryHandlers;
 using LightOps.Commerce.Services.Product.Api.QueryResults;
@@ -36,24 +36,29 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
                             .Any(p => p.CurrencyCode == query.CurrencyCode)));
             }
 
-            // Sort underlying list
+            // Use default sorting order
+            inMemoryQuery = inMemoryQuery.OrderBy(x => x.SortOrder);
+
+            // Sort underlying list if sorting key is specified
             switch (query.SortKey)
             {
-                case GetBySearchRequest.Types.SortKey.Title:
+                case ProductSortKey.Title:
                     // Only possible when using a language code
                     if (!string.IsNullOrEmpty(query.LanguageCode))
                     {
                         inMemoryQuery = inMemoryQuery.OrderBy(x => x.Titles
-                            .FirstOrDefault(l => l.LanguageCode == query.LanguageCode));
+                            .Where(l => l.LanguageCode == query.LanguageCode) // Match language code
+                            .Select(l => l.Value) // Convert to value
+                            .FirstOrDefault());
                     }
                     break;
-                case GetBySearchRequest.Types.SortKey.CreatedAt:
-                    inMemoryQuery = inMemoryQuery.OrderBy(x => x.CreatedAt);
+                case ProductSortKey.CreatedAt:
+                    inMemoryQuery = inMemoryQuery.OrderBy(x => x.CreatedAt.ToDateTime());
                     break;
-                case GetBySearchRequest.Types.SortKey.UpdatedAt:
-                    inMemoryQuery = inMemoryQuery.OrderBy(x => x.UpdatedAt);
+                case ProductSortKey.UpdatedAt:
+                    inMemoryQuery = inMemoryQuery.OrderBy(x => x.UpdatedAt.ToDateTime());
                     break;
-                case GetBySearchRequest.Types.SortKey.UnitPrice:
+                case ProductSortKey.UnitPrice:
                     // Only possible when using a currency code
                     if (!string.IsNullOrEmpty(query.CurrencyCode))
                     {
@@ -61,7 +66,7 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
                             x.Variants
                                 .Min(v => v.UnitPrices
                                     .Where(p => p.CurrencyCode == query.CurrencyCode) // Match currency code
-                                    .Select(price => price.Units + price.Nanos / 1_000_000_000) // Convert to long
+                                    .Select(p => p.Units + p.Nanos / 1_000_000_000) // Convert to long
                                     .FirstOrDefault()));
                     }
                     break;
