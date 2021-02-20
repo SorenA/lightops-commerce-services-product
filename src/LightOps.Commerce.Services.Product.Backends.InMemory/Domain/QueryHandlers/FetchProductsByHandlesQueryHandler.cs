@@ -18,9 +18,13 @@ namespace LightOps.Commerce.Services.Product.Backends.InMemory.Domain.QueryHandl
 
         public Task<IList<Proto.Types.Product>> HandleAsync(FetchProductsByHandlesQuery query)
         {
+            // Match any localized handle
             var products = _inMemoryProductProvider
                 .Products?
-                .Where(c => query.Handles.Contains(c.Handle))
+                .Where(p => p.Handles
+                    .Select(ls => ls.Value)
+                    .Intersect(query.Handles)
+                    .Any())
                 .ToList();
 
             return Task.FromResult<IList<Proto.Types.Product>>(products ?? new List<Proto.Types.Product>());
